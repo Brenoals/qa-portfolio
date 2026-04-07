@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card de Atividade - Cadastro de Usuário</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .badge.priority {
+            background: #e74c3c;
+        }
+
+        .badge.story-points {
+            background: #f39c12;
+        }
+
+        .badge.sprint {
+            background: #27ae60;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            padding-left: 5px;
+        }
+
+        .user-story {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 1.1em;
+            margin: 15px 0;
+            border-left: 4px solid #764ba2;
+        }
+
+        .test-step {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #27ae60;
+        }
+
+        .expected-result {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 10px 0;
+        }
+
+        .acceptance-criteria {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .print-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .print-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 30px;
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+
+        .footer span {
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .tabs, .print-btn {
+                display: none;
+            }
+            .tab-content {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Card de Atividade - Backlog</h1>
+            <p>Sistema de Cadastro de Usuários - Automation Exercise</p>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <h2>Informacoes do Card</h2>
+                <div>
+                    <span class="badge">ID: US-001</span>
+                    <span class="badge priority">Prioridade: Alta</span>
+                    <span class="badge story-points">Story Points: 8</span>
+                    <span class="badge sprint">Sprint: 1</span>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab(0)">Historia de Usuario</button>
+                <button class="tab" onclick="switchTab(1)">Criterios de Aceite</button>
+                <button class="tab" onclick="switchTab(2)">Roteiro de Teste</button>
+                <button class="tab" onclick="switchTab(3)">Resultado Esperado</button>
+            </div>
+
+            <div class="tab-content active">
+                <div class="card">
+                    <h2>Historia de Usuario</h2>
+                    <div class="user-story">
+                        <strong>Como</strong> um novo visitante do site Automation Exercise,<br>
+                        <strong>Quero</strong> poder criar uma conta de usuario com meus dados pessoais,<br>
+                        <strong>Para que</strong> eu possa acessar funcionalidades exclusivas, fazer compras e receber ofertas personalizadas.
+                    </div>
+
+                    <h3>Descricao Detalhada</h3>
+                    <p>Esta funcionalidade permite que novos usuarios se cadastrem no sistema atraves de um fluxo completo de registro. O usuario fornece informacoes basicas (nome e email), preenche dados da conta (senha, data de nascimento) e informacoes adicionais (endereco, telefone). O sistema deve validar as informacoes, criar a conta e confirmar o sucesso do cadastro.</p>
+
+                    <h3>Objetivo de Negocio</h3>
+                    <p>Aumentar a base de usuarios registrados e coletar informacoes relevantes para marketing e personalizacao da experiencia de compra.</p>
+
+                    <h3>Requisitos Tecnicos</h3>
+                    <ul>
+                        <li>Validacao de email unico no sistema</li>
+                        <li>Criptografia de senha</li>
+                        <li>Campos obrigatorios e opcionais claramente identificados</li>
+                        <li>Suporte a multiplos paises no cadastro de endereco</li>
+                        <li>Sistema de opt-in para newsletter e ofertas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="card">
+                    <h2>Criterios de Aceite</h2>
+                    
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 1: Acesso a Pagina de Cadastro</h3>
+                        <p><strong>Dado que</strong> estou na pagina inicial do site,<br>
+                        <strong>Quando</strong> clico no botao "Signup / Login",<br>
+                        <strong>Entao</strong> devo ser redirecionado para a pagina de cadastro/login e visualizar o formulario "New User Signup!".</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 2: Validacao Inicial (Nome e Email)</h3>
+                        <p><strong>Dado que</strong> estou no formulario "New User Signup!",<br>
+                        <strong>Quando</strong> preencho um nome valido e um email valido que nao existe no sistema,<br>
+                        <strong>Entao</strong> devo avancar para o formulario completo "ENTER ACCOUNT INFORMATION".</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 3: Preenchimento de Dados da Conta</h3>
+                        <p><strong>Dado que</strong> estou no formulario "ENTER ACCOUNT INFORMATION",<br>
+                        <strong>Quando</strong> preencho todos os campos obrigatorios (titulo, senha, data de nascimento),<br>
+                        <strong>Entao</strong> devo poder selecionar opcoes de newsletter e ofertas especiais.</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 4: Preenchimento de Dados de Endereco</h3>
+                        <p><strong>Dado que</strong> preenchi os dados da conta,<br>
+                        <strong>Quando</strong> preencho informacoes de endereco completo (nome, sobrenome, empresa, endereco, pais, estado, cidade, CEP, telefone),<br>
+                        <strong>Entao</strong> devo poder finalizar o cadastro clicando em "Create Account".</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 5: Confirmacao de Cadastro</h3>
+                        <p><strong>Dado que</strong> submeti o formulario completo de cadastro,<br>
+                        <strong>Quando</strong> o sistema processa as informacoes com sucesso,<br>
+                        <strong>Entao</strong> devo visualizar a mensagem "ACCOUNT CREATED!" e poder continuar.</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 6: Login Automatico</h3>
+                        <p><strong>Dado que</strong> minha conta foi criada com sucesso,<br>
+                        <strong>Quando</strong> clico em "Continue",<br>
+                        <strong>Entao</strong> devo estar automaticamente logado e visualizar "Logged in as [nome do usuario]".</p>
+                    </div>
+
+                    <div class="acceptance-criteria">
+                        <h3>Criterio 7: Exclusao de Conta (Opcional para Teste)</h3>
+                        <p><strong>Dado que</strong> estou logado no sistema,<br>
+                        <strong>Quando</strong> clico em "Delete Account",<br>
+                        <strong>Entao</strong> minha conta deve ser removida e devo visualizar "ACCOUNT DELETED!".</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="card">
+                    <h2>Roteiro de Teste</h2>
+                    
+                    <h3>Pre-condicoes</h3>
+                    <ul>
+                        <li>Navegador web compativel instalado (Chrome, Firefox, Safari, Edge)</li>
+                        <li>Conexao com internet ativa</li>
+                        <li>Email valido e nao cadastrado no sistema</li>
+                    </ul>
+
+                    <h3>Dados de Teste</h3>
+                    <ul>
+                        <li><strong>Nome:</strong> Joao Silva</li>
+                        <li><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98f2f7f9f7b6ebf1f4eef9b6ecfdebecfdd8fde0f9f5e8f4fdb6fbf7f5">[email&#160;protected]</a></li>
+                        <li><strong>Senha:</strong> SenhaForte@123</li>
+                        <li><strong>Data de Nascimento:</strong> 15/05/1990</li>
+                        <li><strong>Empresa:</strong> Tech Solutions Ltda</li>
+                        <li><strong>Endereco:</strong> Rua das Flores, 123</li>
+                        <li><strong>Pais:</strong> Brasil</li>
+                        <li><strong>Estado:</strong> Sao Paulo</li>
+                        <li><strong>Cidade:</strong> Sao Paulo</li>
+                        <li><strong>CEP:</strong> 01234-567</li>
+                        <li><strong>Telefone:</strong> (11) 98765-4321</li>
+                    </ul>
+
+                    <h3>Passos do Teste</h3>
+                    <div class="test-step"><strong>Passo 1:</strong> Abrir o navegador web</div>
+                    <div class="test-step"><strong>Passo 2:</strong> Navegar para a URL: http://automationexercise.com</div>
+                    <div class="test-step"><strong>Passo 3:</strong> Verificar que a pagina inicial esta visivel e carregada corretamente</div>
+                    <div class="test-step"><strong>Passo 4:</strong> Localizar e clicar no botao "Signup / Login" no menu superior</div>
+                    <div class="test-step"><strong>Passo 5:</strong> Verificar que o texto "New User Signup!" esta visivel na pagina</div>
+                    <div class="test-step"><strong>Passo 6:</strong> Preencher o campo "Name" com o nome de teste</div>
+                    <div class="test-step"><strong>Passo 7:</strong> Preencher o campo "Email Address" com o email de teste</div>
+                    <div class="test-step"><strong>Passo 8:</strong> Clicar no botao "Signup"</div>
+                    <div class="test-step"><strong>Passo 9:</strong> Verificar que o texto "ENTER ACCOUNT INFORMATION" esta visivel</div>
+                    <div class="test-step"><strong>Passo 10:</strong> Selecionar um titulo (Mr./Mrs.)</div>
+                    <div class="test-step"><strong>Passo 11:</strong> Verificar que o campo "Name" esta preenchido automaticamente</div>
+                    <div class="test-step"><strong>Passo 12:</strong> Verificar que o campo "Email" esta preenchido automaticamente</div>
+                    <div class="test-step"><strong>Passo 13:</strong> Preencher o campo "Password" com a senha de teste</div>
+                    <div class="test-step"><strong>Passo 14:</strong> Selecionar a data de nascimento (dia, mes e ano)</div>
+                    <div class="test-step"><strong>Passo 15:</strong> Marcar o checkbox "Sign up for our newsletter!"</div>
+                    <div class="test-step"><strong>Passo 16:</strong> Marcar o checkbox "Receive special offers from our partners!"</div>
+                    <div class="test-step"><strong>Passo 17:</strong> Preencher o campo "First name"</div>
+                    <div class="test-step"><strong>Passo 18:</strong> Preencher o campo "Last name"</div>
+                    <div class="test-step"><strong>Passo 19:</strong> Preencher o campo "Company"</div>
+                    <div class="test-step"><strong>Passo 20:</strong> Preencher o campo "Address" (linha 1)</div>
+                    <div class="test-step"><strong>Passo 21:</strong> Preencher o campo "Address2" (linha 2) - opcional</div>
+                    <div class="test-step"><strong>Passo 22:</strong> Selecionar o "Country" no dropdown</div>
+                    <div class="test-step"><strong>Passo 23:</strong> Preencher o campo "State"</div>
+                    <div class="test-step"><strong>Passo 24:</strong> Preencher o campo "City"</div>
+                    <div class="test-step"><strong>Passo 25:</strong> Preencher o campo "Zipcode"</div>
+                    <div class="test-step"><strong>Passo 26:</strong> Preencher o campo "Mobile Number"</div>
+                    <div class="test-step"><strong>Passo 27:</strong> Clicar no botao "Create Account"</div>
+                    <div class="test-step"><strong>Passo 28:</strong> Verificar que a mensagem "ACCOUNT CREATED!" esta visivel</div>
+                    <div class="test-step"><strong>Passo 29:</strong> Clicar no botao "Continue"</div>
+                    <div class="test-step"><strong>Passo 30:</strong> Verificar que a mensagem "Logged in as [nome do usuario]" esta visivel no topo da pagina</div>
+                    <div class="test-step"><strong>Passo 31:</strong> Clicar no botao "Delete Account"</div>
+                    <div class="test-step"><strong>Passo 32:</strong> Verificar que a mensagem "ACCOUNT DELETED!" esta visivel</div>
+                    <div class="test-step"><strong>Passo 33:</strong> Clicar no botao "Continue"</div>
+
+                    <h3>Pos-condicoes</h3>
+                    <ul>
+                        <li>Conta de teste criada e removida com sucesso</li>
+                        <li>Navegador pode ser fechado</li>
+                        <li>Sistema retorna ao estado inicial</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="card">
+                    <h2>Resultado Esperado</h2>
+                    
+                    <h3>Resultado Geral</h3>
+                    <div class="expected-result">
+                        <p><strong>Sucesso:</strong> O fluxo completo de cadastro de usuario deve ser executado sem erros, desde o acesso a pagina inicial ate a confirmacao de exclusao da conta.</p>
+                    </div>
+
+                    <h3>Resultados Especificos por Etapa</h3>
+
+                    <div class="expected-result">
+                        <strong>Etapa 1-3: Acesso ao Site</strong>
+                        <ul>
+                            <li>A pagina inicial do Automation Exercise carrega completamente</li>
+                            <li>Todos os elementos visuais (logo, menu, banners) estao visiveis</li>
+                            <li>Nao ha erros de carregamento ou mensagens de erro</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 4-5: Navegacao para Cadastro</strong>
+                        <ul>
+                            <li>O botao "Signup / Login" e encontrado e clicavel</li>
+                            <li>Redirecionamento para a pagina de cadastro ocorre corretamente</li>
+                            <li>O formulario "New User Signup!" e exibido claramente</li>
+                            <li>Campos de nome e email estao disponiveis para preenchimento</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 6-8: Cadastro Inicial</strong>
+                        <ul>
+                            <li>Os campos aceitam a entrada de texto normalmente</li>
+                            <li>O botao "Signup" fica habilitado apos o preenchimento</li>
+                            <li>Ao clicar em "Signup", o sistema processa a solicitacao</li>
+                            <li>Nao ha mensagem de erro indicando email duplicado</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 9-16: Preenchimento de Dados da Conta</strong>
+                        <ul>
+                            <li>O titulo "ENTER ACCOUNT INFORMATION" e exibido no topo do formulario</li>
+                            <li>Nome e email sao preenchidos automaticamente do passo anterior</li>
+                            <li>Campos de titulo (Mr./Mrs.) estao disponiveis para selecao</li>
+                            <li>Campo de senha aceita entrada e mascara os caracteres</li>
+                            <li>Dropdowns de data de nascimento (dia, mes, ano) funcionam corretamente</li>
+                            <li>Checkboxes de newsletter e ofertas sao marcaveis</li>
+                            <li>Validacoes de campos obrigatorios funcionam (se aplicavel)</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 17-26: Preenchimento de Endereco</strong>
+                        <ul>
+                            <li>Todos os campos de endereco aceitam entrada de texto</li>
+                            <li>Dropdown de pais exibe lista de paises disponiveis</li>
+                            <li>Campos numericos (CEP, telefone) aceitam formatacao adequada</li>
+                            <li>Nao ha limite restritivo de caracteres nos campos de texto</li>
+                            <li>Campo Address2 e opcional e pode ficar em branco</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 27-28: Criacao da Conta</strong>
+                        <ul>
+                            <li>O botao "Create Account" esta habilitado e clicavel</li>
+                            <li>Ao clicar, o sistema processa o cadastro (pode haver loading)</li>
+                            <li>A pagina de confirmacao e exibida</li>
+                            <li>A mensagem "ACCOUNT CREATED!" aparece de forma destacada</li>
+                            <li>Botao "Continue" esta disponivel e visivel</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 29-30: Login Automatico</strong>
+                        <ul>
+                            <li>Ao clicar em "Continue", o usuario e redirecionado para a pagina inicial</li>
+                            <li>O sistema realiza login automatico do usuario recem-criado</li>
+                            <li>No cabecalho da pagina, aparece "Logged in as [nome do usuario]"</li>
+                            <li>O nome exibido corresponde ao nome fornecido no cadastro</li>
+                            <li>O menu muda para refletir o estado de usuario logado</li>
+                            <li>Opcao "Delete Account" fica disponivel no menu</li>
+                        </ul>
+                    </div>
+
+                    <div class="expected-result">
+                        <strong>Etapa 31-33: Exclusao da Conta</strong>
+                        <ul>
+                            <li>O botao/link "Delete Account" e encontrado e clicavel</li>
+                            <li>Ao clicar, o sistema processa a exclusao da conta</li>
+                            <li>A mensagem "ACCOUNT DELETED!" e exibida de forma clara</li>
+                            <li>Botao "Continue" esta presente para finalizar o processo</li>
+                            <li>Apos clicar em "Continue", o sistema retorna ao estado de usuario nao logado</li>
+                            <li>A conta e permanentemente removida do banco de dados</li>
+                        </ul>
+                    </div>
+
+                    <h3>Criterios de Sucesso Global</h3>
+                    <div class="expected-result">
+                        <ul>
+                            <li>Nenhuma mensagem de erro e exibida durante todo o fluxo</li>
+                            <li>Todos os redirecionamentos funcionam corretamente</li>
+                            <li>Todas as validacoes de dados funcionam adequadamente</li>
+                            <li>O usuario consegue completar o cadastro em menos de 5 minutos</li>
+                            <li>A interface esta responsiva e carrega em tempo aceitavel (menos de 3 segundos por pagina)</li>
+                            <li>Dados sao persistidos corretamente no banco de dados</li>
+                            <li>A exclusao da conta remove todos os dados do sistema</li>
+                        </ul>
+                    </div>
+
+                    <h3>Casos de Falha</h3>
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 5px; border-left: 4px solid #dc3545; margin: 10px 0;">
+                        <p><strong>O teste falha se:</strong></p>
+                        <ul>
+                            <li>Qualquer pagina nao carregar corretamente</li>
+                            <li>Mensagens de validacao esperadas nao aparecerem</li>
+                            <li>Elementos da interface (botoes, campos) nao estiverem visiveis ou funcionais</li>
+                            <li>A conta nao for criada apos submissao do formulario</li>
+                            <li>O login automatico nao funcionar</li>
+                            <li>A exclusao da conta falhar ou nao remover os dados</li>
+                            <li>Ocorrer qualquer erro de sistema (500, 404, timeout, etc.)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="print-btn" onclick="window.print()">Imprimir Card Completo</button>
+        </div>
+
+        <div class="footer">
+            Elaborado por <span>Breno Alisson</span>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('acti
