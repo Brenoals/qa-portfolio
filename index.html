@@ -363,7 +363,7 @@
                     <h3>Dados de Teste</h3>
                     <ul>
                         <li><strong>Nome:</strong> Joao Silva</li>
-                        <li><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="98f2f7f9f7b6ebf1f4eef9b6ecfdebecfdd8fde0f9f5e8f4fdb6fbf7f5">[email&#160;protected]</a></li>
+                        <li><strong>Email:</strong> joao.silva.teste@example.com</li>
                         <li><strong>Senha:</strong> SenhaForte@123</li>
                         <li><strong>Data de Nascimento:</strong> 15/05/1990</li>
                         <li><strong>Empresa:</strong> Tech Solutions Ltda</li>
@@ -555,9 +555,17 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         function switchTab(index) {
             const tabs = document.querySelectorAll('.tab');
             const contents = document.querySelectorAll('.tab-content');
             
-            tabs.forEach(tab => tab.classList.remove('acti
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            tabs[index].classList.add('active');
+            contents[index].classList.add('active');
+        }
+    </script>
+</body>
+</html>
